@@ -2,8 +2,7 @@
 #--------------------------------------------------------------------------
 # Image Setup
 #--------------------------------------------------------------------------
-#
-# To edit the 'workspace' base Image, visit its repository on Github
+# # To edit the 'workspace' base Image, visit its repository on Github
 #    https://github.com/Laradock/workspace
 #
 # To change its version, see the available Tags on the Docker Hub:
@@ -62,30 +61,24 @@ RUN groupadd -g ${PGID} laradock && \
 # SOAP:
 #####################################
 USER root
-
 ARG INSTALL_SOAP=false
 ENV INSTALL_SOAP ${INSTALL_SOAP}
-
 RUN if [ ${INSTALL_SOAP} = true ]; then \
   # Install the PHP SOAP extension
   add-apt-repository -y ppa:ondrej/php && \
   apt-get update -yqq && \
   apt-get -y install libxml2-dev php7.1-soap \
 ;fi
-
 #####################################
 # LDAP:
 #####################################
-
 ARG INSTALL_LDAP=false
 ENV INSTALL_LDAP ${INSTALL_LDAP}
-
 RUN if [ ${INSTALL_LDAP} = true ]; then \
     apt-get update -yqq && \
     apt-get install -y libldap2-dev && \
     apt-get install -y php7.1-ldap \
 ;fi
-
 #####################################
 # IMAP:
 #####################################
@@ -233,6 +226,7 @@ RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
     phpenmod redis \
 ;fi
 
+
 #####################################
 # Drush:
 #####################################
@@ -318,6 +312,7 @@ ARG YARN_VERSION=latest
 ENV YARN_VERSION ${YARN_VERSION}
 
 RUN if [ ${INSTALL_YARN} = true ]; then \
+    export PATH=$PATH:/home/laradock/.nvm/versions/node/v7.1.0/bin && \
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && \
     if [ ${YARN_VERSION} = "latest" ]; then \
         curl -o- -L https://yarnpkg.com/install.sh | bash; \
@@ -677,6 +672,28 @@ RUN if [ ${INSTALL_DUSK_DEPS} = true ]; then \
   && rm chromedriver_linux64.zip \
 ;fi
 
+######################################
+# Tidy
+#####################################
+ARG INSTALL_TIDY=false
+ENV INSTALL_TIDY ${INSTALL_TIDY}
+RUN if [ ${INSTALL_TIDY} = true ]; then \
+ apt-get update -y && \
+	apt-get install -y php-tidy \
+;fi
+
+######################################
+# MYSQL CLIENT
+######################################
+USER root
+ARG INSTALL_MYSQL_CLIENT=false
+ENV INSTALL_MYSQL_CLIENT ${INSTALL_MYSQL_CLIENT}
+RUN if [ ${INSTALL_MYSQL_CLIENT} = true ]; then \
+	apt-get update \
+	&& apt-get install -y mysql-client \
+;fi
+
+#
 #
 #--------------------------------------------------------------------------
 # Final Touch

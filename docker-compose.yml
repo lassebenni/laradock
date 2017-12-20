@@ -43,6 +43,8 @@ services:
           - INSTALL_TERRAFORM=${WORKSPACE_INSTALL_TERRAFORM}
           - INSTALL_DUSK_DEPS=${WORKSPACE_INSTALL_DUSK_DEPS}
           - INSTALL_PG_CLIENT=${WORKSPACE_INSTALL_PG_CLIENT}
+          - INSTALL_TIDY=${WORKSPACE_INSTALL_TIDY}
+          - INSTALL_MYSQL_CLIENT=${WORKSPACE_INSTALL_MYSQL_CLIENT}
           - PUID=${WORKSPACE_PUID}
           - PGID=${WORKSPACE_PGID}
           - CHROME_DRIVER_VERSION=${WORKSPACE_CHROME_DRIVER_VERSION}
@@ -59,6 +61,8 @@ services:
       ports:
         - "${WORKSPACE_SSH_PORT}:22"
       tty: true
+      environment:
+        - PATH=$PATH:$HOME/.yarn/bin:var/www/vendor/bin:$HOME/.nvm/versions/
       networks:
         - frontend
         - backend

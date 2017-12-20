@@ -1,9 +1,8 @@
-#
-#--------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------
 # Image Setup
 #--------------------------------------------------------------------------
-#
-# To edit the 'php-fpm' base Image, visit its repository on Github
+# # To edit the 'php-fpm' base Image, visit its repository on Github
 #    https://github.com/Laradock/php-fpm
 #
 # To change its version, see the available Tags on the Docker Hub:
@@ -12,7 +11,7 @@
 # Note: Base Image name format {image-tag}-{php-version}
 #
 
-FROM laradock/php-fpm:1.4-71
+FROM laradock/php-fpm:2.0-71
 
 MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 
@@ -53,14 +52,12 @@ RUN if [ ${INSTALL_SOAP} = true ]; then \
 #####################################
 # pgsql
 #####################################
-
 ARG INSTALL_PGSQL=false
 RUN if [ ${INSTALL_PGSQL} = true ]; then \
     # Install the pgsql extension
     apt-get update -yqq && \
     docker-php-ext-install pgsql \
 ;fi
-
 #####################################
 # pgsql client
 #####################################
@@ -335,6 +332,13 @@ RUN if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
     docker-php-ext-enable imagick \
 ;fi
 
+#####################################
+# TIDY:
+#####################################
+#ARG INSTALL_TIDY=true
+#RUN if [ ${INSTALL_TIDY} = true ]; then \
+#;fi
+
 #
 #--------------------------------------------------------------------------
 # Final Touch
@@ -352,4 +356,3 @@ WORKDIR /var/www
 
 CMD ["php-fpm"]
 
-EXPOSE 9000
